@@ -1,0 +1,27 @@
+name: Update Stars
+
+on:
+    schedule:
+        - cron: "0 */6 * 12 *"
+    workflow_dispatch:
+
+jobs:
+    update-stars:
+        name: Update Stars
+        runs-on: ubuntu-latest
+        if: ${{ vars.AOC_ENABLED == 'true' }}
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Update Stars
+              uses: k2bd/advent-readme-stars@v1
+              with:
+                  userId: ${{ secrets.AOC_USER_ID }}
+                  sessionCookie: ${{ secrets.AOC_SESSION }}
+                  year: ${{ secrets.AOC_YEAR }}
+            - name: Commit
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                  commit_message: "ci: update stars"
