@@ -1,0 +1,25 @@
+[package]
+name = "advent_of_code"
+version = "0.1.0"
+authors = ["Hayden Moritz <me@hmoritz.dev>"]
+edition = "2021"
+default-run = "advent_of_code"
+publish = false
+
+[lib]
+doctest = false
+
+[profile.dhat]
+inherits = "release"
+debug = 1
+
+[features]
+dhat-heap = ["dhat"]
+today = ["chrono"]
+test_lib = []
+
+[dependencies]
+chrono = { version = "0.4.38", optional = true }
+dhat = { version = "0.3.3", optional = true }
+pico-args = "0.5.0"
+tinyjson = "2.5.1"
