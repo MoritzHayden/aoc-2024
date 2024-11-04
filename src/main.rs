@@ -20,6 +20,7 @@ mod args {
         Scaffold {
             day: Day,
             download: bool,
+            overwrite: bool,
         },
         Solve {
             day: Day,
@@ -65,6 +66,7 @@ mod args {
             Some("scaffold") => AppArguments::Scaffold {
                 day: args.free_from_str()?,
                 download: args.contains("--download"),
+                overwrite: args.contains("--overwrite"),
             },
             Some("solve") => AppArguments::Solve {
                 day: args.free_from_str()?,
@@ -75,7 +77,7 @@ mod args {
             #[cfg(feature = "today")]
             Some("today") => AppArguments::Today,
             Some(x) => {
-                eprintln!("Unknown command: {x}");
+                eprintln!("Unknown command: {x}.");
                 process::exit(1);
             }
             None => {
@@ -104,8 +106,12 @@ fn main() {
             AppArguments::Time { day, all, store } => time::handle(day, all, store),
             AppArguments::Download { day } => download::handle(day),
             AppArguments::Read { day } => read::handle(day),
-            AppArguments::Scaffold { day, download } => {
-                scaffold::handle(day);
+            AppArguments::Scaffold {
+                day,
+                download,
+                overwrite,
+            } => {
+                scaffold::handle(day, overwrite);
                 if download {
                     download::handle(day);
                 }
@@ -120,14 +126,14 @@ fn main() {
             AppArguments::Today => {
                 match Day::today() {
                     Some(day) => {
-                        scaffold::handle(day);
+                        scaffold::handle(day, false);
                         download::handle(day);
                         read::handle(day)
                     }
                     None => {
                         eprintln!(
                             "`today` command can only be run between the 1st and \
-                            the 25th of december. Please use `scaffold` with a specific day."
+                            the 25th of December. Please use `scaffold` with a specific day."
                         );
                         process::exit(1)
                     }
