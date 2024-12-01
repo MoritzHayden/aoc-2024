@@ -1,4 +1,5 @@
 use regex::Regex;
+use std::cmp::Ordering;
 
 advent_of_code::solution!(1);
 
@@ -20,12 +21,10 @@ pub fn part_one(input: &str) -> Option<u32> {
 
     // 3. Iterate through the lists and calculate the difference between the two corresponding elements
     for (left, right) in left_locations.iter().zip(right_locations.iter()) {
-        if left > right {
-            total_diff += left - right;
-        } else if right > left {
-            total_diff += right - left;
-        } else {
-            total_diff += 0;
+        match left.cmp(right) {
+            Ordering::Greater => total_diff += left - right,
+            Ordering::Less => total_diff += right - left,
+            _ => total_diff += 0,
         }
     }
 
@@ -51,8 +50,6 @@ pub fn part_two(input: &str) -> Option<u32> {
 
     // 3. Iterate through the lists and calculate the similarity scores
     for left in left_locations.iter() {
-        println!("left: {}", *left);
-        println!("right_locations: {}", right_locations.iter().filter(|x| *x == left).count());
         similarity_score += left * right_locations.iter().filter(|x| *x == left).count() as u32;
     }
 
