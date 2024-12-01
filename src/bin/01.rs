@@ -1,4 +1,3 @@
-use std::path::absolute;
 use regex::Regex;
 
 advent_of_code::solution!(1);
