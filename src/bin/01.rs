@@ -1,3 +1,4 @@
+use std::path::absolute;
 use regex::Regex;
 
 advent_of_code::solution!(1);
@@ -20,7 +21,15 @@ pub fn part_one(input: &str) -> Option<u32> {
 
     // 3. Iterate through the lists and calculate the difference between the two corresponding elements
     for (left, right) in left_locations.iter().zip(right_locations.iter()) {
-        total_diff += left - right;
+        if left > right {
+            total_diff += left - right;
+            println!("{} - {} = {}", left, right, left - right);
+        } else if right > left {
+            total_diff += right - left;
+            println!("{} - {} = {}", right, left, right - left);
+        } else {
+            total_diff += 0;
+        }
     }
 
     // 4. Sum the differences and return the total difference
@@ -44,6 +53,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(31));
     }
 }
