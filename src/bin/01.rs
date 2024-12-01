@@ -22,21 +22,42 @@ pub fn part_one(input: &str) -> Option<u32> {
     for (left, right) in left_locations.iter().zip(right_locations.iter()) {
         if left > right {
             total_diff += left - right;
-            println!("{} - {} = {}", left, right, left - right);
         } else if right > left {
             total_diff += right - left;
-            println!("{} - {} = {}", right, left, right - left);
         } else {
             total_diff += 0;
         }
     }
 
-    // 4. Sum the differences and return the total difference
+    // 4. Return the total sum of differences
     Some(total_diff)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+    // 1. Parse the input into two lists using regex capturing groups
+    let mut similarity_score: u32 = 0;
+    let mut left_locations: Vec<u32> = Vec::new();
+    let mut right_locations: Vec<u32> = Vec::new();
+    let re = Regex::new(r"(\d+)\s+(\d+)").unwrap();
+    for line in input.lines() {
+        let caps = re.captures(line).unwrap();
+        left_locations.push(caps[1].parse::<u32>().unwrap());
+        right_locations.push(caps[2].parse::<u32>().unwrap());
+    }
+
+    // 2. Sort the lists
+    left_locations.sort();
+    right_locations.sort();
+
+    // 3. Iterate through the lists and calculate the similarity scores
+    for left in left_locations.iter() {
+        println!("left: {}", *left);
+        println!("right_locations: {}", right_locations.iter().filter(|x| *x == left).count());
+        similarity_score += left * right_locations.iter().filter(|x| *x == left).count() as u32;
+    }
+
+    // 4. Return the total sum of similarity scores
+    Some(similarity_score)
 }
 
 #[cfg(test)]
