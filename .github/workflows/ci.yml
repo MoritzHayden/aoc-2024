@@ -30,7 +30,7 @@ jobs:
               run: cargo clippy -- -D warnings
             - name: Format
               run: cargo fmt --check
-            - name: Run Benchmarks
+            - name: Benchmark
               run: cargo time --all --store
             - name: Commit
               uses: stefanzweifel/git-auto-commit-action@v5
