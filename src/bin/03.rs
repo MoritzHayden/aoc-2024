@@ -9,19 +9,42 @@ enum Part {
 
 fn calculate_product(input: &str, part: Part) -> Option<u32> {
     // Define variables
+    let mut mul_enabled = true;
     let mut product: u32;
     let mut result: u32 = 0;
 
     // Extract each mul instruction using multiple regex capturing groups
     let re = match part {
         Part::One => Regex::new(r"(mul\((\d{1,3}),(\d{1,3})\))").unwrap(),
-        Part::Two => Regex::new(r"(mul\((\d{1,3}),(\d{1,3})\))").unwrap(),
+        Part::Two => Regex::new(r"(do\(\))|(don't\(\))|mul\((\d{1,3}),(\d{1,3})\)").unwrap(),
     };
 
     // Calculate the product of each mul instruction
     for cap in re.captures_iter(input) {
-        let left_instruction: u32 = cap[2].parse::<u32>().unwrap();
-        let right_instruction: u32 = cap[3].parse::<u32>().unwrap();
+        let mut left_instruction: u32 = 0;
+        let mut right_instruction: u32 = 0;
+
+        match part {
+            Part::One => {
+                left_instruction = cap[2].parse::<u32>().unwrap();
+                right_instruction = cap[3].parse::<u32>().unwrap();
+            }
+            Part::Two => match &cap[0] {
+                "do()" => {
+                    mul_enabled = true;
+                }
+                "don't()" => {
+                    mul_enabled = false;
+                }
+                _ => {
+                    if mul_enabled {
+                        left_instruction = cap[3].parse::<u32>().unwrap();
+                        right_instruction = cap[4].parse::<u32>().unwrap();
+                    }
+                }
+            },
+        };
+
         product = left_instruction * right_instruction;
         result += product;
     }
@@ -31,11 +54,11 @@ fn calculate_product(input: &str, part: Part) -> Option<u32> {
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
-    Some(calculate_product(input, Part::One)?)
+    calculate_product(input, Part::One)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    Some(calculate_product(input, Part::Two)?)
+    calculate_product(input, Part::Two)
 }
 
 #[cfg(test)]
