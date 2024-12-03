@@ -12,6 +12,15 @@ Solutions for [Advent of Code 2024](https://adventofcode.com/2024) in [Rust](htt
 <!--- advent_readme_stars table --->
 
 <!--- benchmarking table --->
+## Benchmarks
+
+| Day | Part 1 | Part 2 |
+| :---: | :---: | :---:  |
+| [Day 1](./src/bin/01.rs) | `298.1µs` | `323.3µs` |
+| [Day 2](./src/bin/02.rs) | `124.8µs` | `173.0µs` |
+
+**Total: 0.92ms**
+<!--- benchmarking table --->
 
 ---
 
