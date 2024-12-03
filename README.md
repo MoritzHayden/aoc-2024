@@ -17,8 +17,11 @@ Solutions for [Advent of Code 2024](https://adventofcode.com/2024) in [Rust](htt
 
 | Day | Part 1 | Part 2 |
 | :---: | :---: | :---:  |
+| [Day 1](./src/bin/01.rs) | `288.0µs` | `322.3µs` |
+| [Day 2](./src/bin/02.rs) | `118.3µs` | `180.7µs` |
+| [Day 3](./src/bin/03.rs) | `234.1µs` | `284.4µs` |
 
-**Total: -0.00ms**
+**Total: 1.43ms**
 <!--- benchmarking table --->
 
 ---
