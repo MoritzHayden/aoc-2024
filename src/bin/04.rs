@@ -105,9 +105,11 @@ fn count_occurrences_part_two(puzzle: &[Vec<char>]) -> u32 {
                 safe_get(puzzle, row_index.checked_add(1), col_index.checked_sub(1)),
             ];
 
-            let count_m: usize = chars.iter().filter(|&ch| *ch == 'M').count();
-            let count_s: usize = chars.iter().filter(|&ch| *ch == 'S').count();
-            if count_m == 2 && count_s == 2 {
+            if chars == ['M', 'M', 'S', 'S']
+                || chars == ['S', 'S', 'M', 'M']
+                || chars == ['S', 'M', 'S', 'M']
+                || chars == ['M', 'S', 'M', 'S']
+            {
                 occurrences += 1;
             }
         }
