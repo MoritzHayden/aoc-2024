@@ -4,10 +4,6 @@ fn parse_input(input: &str) -> Vec<Vec<char>> {
     input.lines().map(|line| line.chars().collect()).collect()
 }
 
-fn reverse_str(input: &str) -> String {
-    input.chars().rev().collect()
-}
-
 fn safe_get(puzzle: &[Vec<char>], row_index: Option<usize>, col_index: Option<usize>) -> char {
     if row_index.is_none() || col_index.is_none() {
         return ' ';
@@ -78,7 +74,7 @@ fn count_occurrences_part_one(puzzle: &[Vec<char>], word: &str) -> u32 {
             // Count mutations matching the word
             occurrences += mutations
                 .iter()
-                .filter(|&mutation| vec![word].contains(&mutation.as_str()))
+                .filter(|&mutation| [word].contains(&mutation.as_str()))
                 .count() as u32;
         }
     }
@@ -89,17 +85,46 @@ fn count_occurrences_part_one(puzzle: &[Vec<char>], word: &str) -> u32 {
 
 fn count_occurrences_part_two(puzzle: &[Vec<char>]) -> u32 {
     let mut occurrences: u32 = 0;
+
+    // Check for two diagonally crossing "MAS" intersecting at "A"
+    for (row_index, row) in puzzle.iter().enumerate() {
+        for (col_index, char) in row.iter().enumerate() {
+            // Ignore characters other than 'A'
+            if *char != 'A' {
+                continue;
+            }
+
+            let chars: Vec<char> = vec![
+                //  1. Current location up-right
+                safe_get(puzzle, row_index.checked_sub(1), col_index.checked_add(1)),
+                //  2. Current location up-left
+                safe_get(puzzle, row_index.checked_sub(1), col_index.checked_sub(1)),
+                //  3. Current location down-right
+                safe_get(puzzle, row_index.checked_add(1), col_index.checked_add(1)),
+                //  4. Current location down-left
+                safe_get(puzzle, row_index.checked_add(1), col_index.checked_sub(1)),
+            ];
+
+            let count_m: usize = chars.iter().filter(|&ch| *ch == 'M').count();
+            let count_s: usize = chars.iter().filter(|&ch| *ch == 'S').count();
+            if count_m == 2 && count_s == 2 {
+                occurrences += 1;
+            }
+        }
+    }
+
+    // Return the total number of occurrences
     occurrences
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
-    let puzzle: Vec<Vec<char>> = parse_input(&input);
+    let puzzle: Vec<Vec<char>> = parse_input(input);
     let occurrences: u32 = count_occurrences_part_one(&puzzle, "XMAS");
     Some(occurrences)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    let puzzle: Vec<Vec<char>> = parse_input(&input);
+    let puzzle: Vec<Vec<char>> = parse_input(input);
     let occurrences: u32 = count_occurrences_part_two(&puzzle);
     Some(occurrences)
 }
